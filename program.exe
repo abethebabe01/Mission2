@@ -1,0 +1,73 @@
+using System;
+
+
+//Abe Lamoreaux, Section 02
+//The purpose of this code is to simulate rolling dice as many times as neccesary and to return percentage.
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        Console.WriteLine("Welcome to the dice rolling simulation!");
+        Console.WriteLine("How many times would you like to roll the dice?");
+        
+        string stringRolls = Console.ReadLine();
+
+        // convert the input to a numeric type (e.g., int)
+        if (int.TryParse(stringRolls, out int numRolls))
+        {
+            // Confirm that getting the code work
+            Console.WriteLine("You entered: " + numRolls);
+
+            // Use DiceResults class
+            DiceResults diceResults = new DiceResults();
+
+            // Get the results array from the simulated rolls
+            int[] results = diceResults.SimulateRolls(numRolls);
+
+            // Print histogram
+            PrintHistogram(results, numRolls);
+
+            Console.WriteLine("Thank you for using the dice throwing simulator. Goodbye!");
+        }
+        else
+        {
+            // Input was not a valid number
+            Console.WriteLine("Invalid input. Please enter a valid number.");
+        }
+    }
+
+    private static void PrintHistogram(int[] results, int totalRolls)
+    {
+        Console.WriteLine("DICE ROLLING SIMULATION RESULTS");
+        Console.WriteLine("Each \"*\" represents 1% of the total number of rolls.");
+
+        for (int i = 2; i <= 12; i++)
+        {
+            int percentage = (results[i] * 100) / totalRolls;
+            string asterisks = new string('*', percentage);
+            Console.WriteLine($"{i}: {asterisks}");
+        }
+
+        Console.WriteLine("Total number of rolls = " + totalRolls + ". Thanks for playing! Copyright Abe Lamoreaux.");
+    }
+}
+
+class DiceResults
+{
+    public int[] SimulateRolls(int numberOfRolls)
+    {
+        Random random = new Random();
+        int[] results = new int[13]; // Indices 2 through 12 represent possible dice combinations
+
+        for (int i = 0; i < numberOfRolls; i++)
+        {
+            int dice1 = random.Next(1, 7);
+            int dice2 = random.Next(1, 7);
+            int sum = dice1 + dice2;
+
+            results[sum]++;
+        }
+
+        return results;
+    }
+}
